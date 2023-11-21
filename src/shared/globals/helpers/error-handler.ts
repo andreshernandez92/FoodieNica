@@ -32,8 +32,32 @@ export abstract class CustomError extends Error {
 }
 
 export class BadRequestError extends CustomError {
-    statusCode: number; = HTTP_STATUS.BAD_REQUEST;
+    statusCode: number = HTTP_STATUS.BAD_REQUEST;
     status = 'error';
+}
 
-    
+export class NotFoundError extends CustomError {
+    statusCode: number = HTTP_STATUS.NOT_FOUND;
+    status = 'error';
+    constructor(message: string){
+        super(message);
+    }
+}
+
+export class NotAuthorizeError extends CustomError {
+    statusCode: number = HTTP_STATUS.BAD_REQUEST;
+    status = 'error';
+    constructor(message: string){
+        super(message);
+    }
+}
+
+export class FileTooLargeError extends CustomError {
+    statusCode: number = HTTP_STATUS.REQUEST_TOO_LONG;
+    status = 'error';
+    constructor(message: string){
+        super(message);
+    }
+
+
 }

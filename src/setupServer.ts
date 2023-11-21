@@ -1,4 +1,4 @@
-import { Application, json, urlencoded} from 'express'
+import { Application, json, urlencoded,NextFunction} from 'express'
 import http from 'http'
 import cors from 'cors';
 import helmet from 'helmet';
@@ -6,14 +6,17 @@ import hpp from 'hpp';
 import cookieSession from 'cookie-session';
 import 'express-async-errors';
 import compression from 'compression'
-import {config} from './config'; 
+import {config} from './config';
 import { Server } from 'socket.io'
 import { createClient } from 'redis';
 import { createAdapter } from '@socket.io/redis-adapter';
 import applicationRoutes from './routes'
+import HTTP_STATUS from 'http-status-codes'
+import Logger from 'bunyan'
+import { CustomError, IErrorResponse } from './shared/globals/helpers/error-handler';
 
 const SERVER_PORT = 5000;
-
+const log: Logger = config.createLogger('server')
 export class FoodieNicaServer{
 private app: Application
 
@@ -25,8 +28,8 @@ public start(): void {
     this.standardMiddleware(this.app);
     this.routeMiddleware(this.app);
     this.globalErrorHandler(this.app);
-    
-    this.startServer(this.app);   
+
+    this.startServer(this.app);
     }
 
     private securityMiddleware(app: Application): void {
@@ -57,7 +60,17 @@ public start(): void {
     private routeMiddleware(app: Application): void {
         applicationRoutes(app)
     }
-    private globalErrorHandler(app: Application): void {}
+    private globalErrorHandler(app: Application): void {
+        app.all('*', (req: Request, res: Response) => {
+            res.status(HTTP_STATUS.NOT_FOUND).json({ message: `${req.originalUrl} not Found`})
+        });
+        app.use((error: IErrorResponse, req: Request, res:Response, next: NextFunction) => {
+            log.error(error)
+            if( error instanceof CustomError){
+                return res.status(error.statusCode).json(error.serializeErrors())
+            }
+        })
+    }
     private async startServer(app: Application): Promise<void> {
         try{
             const httpServer: http.Server = new http.Server(app)
@@ -65,7 +78,7 @@ public start(): void {
             this.startHttpServer(httpServer)
         }
         catch(error){
-            console.log(error)
+            log.error(error)
         }
     }
     private async createSocketIO(httpServer:http.Server ): Promise<Server> {
@@ -82,11 +95,13 @@ public start(): void {
         return io
     }
     private startHttpServer(httpServer: http.Server): void {
-       console.log(`Server has started with process ${process.pid}`)
+       log.info(`Server has started with process ${process.pid}`)
         httpServer.listen(SERVER_PORT, ()=>{
-            console.log(`Server running on port ${SERVER_PORT}`)
+            log.info(`Server running on port ${SERVER_PORT}`)
         });
     }
-//    private socketIOConnections(io: Server): void {}
+    private socketIOConnections(io: Server): void {
+      log.info
+    }
 
 }
