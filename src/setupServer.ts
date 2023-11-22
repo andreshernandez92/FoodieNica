@@ -106,7 +106,7 @@ public start(): void {
     }
 
     private socketIOConnections(io: Server): void {
-      log.info('socket start')
+      log.info('socket start');
     }
 
 }
