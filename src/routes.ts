@@ -1,8 +1,7 @@
-import {Application} from "express"
+import { Application } from 'express';
 
 export default (app: Application) => {
-    const routes = () => {
-        app.use('/api/v1/')
-    }
-    routes();
-}
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  const routes = () => {};
+  routes();
+};
