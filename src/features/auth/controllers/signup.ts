@@ -6,6 +6,7 @@ import { IAuthDocument} from '@auth/interfaces/auth.interface';
 import { authService } from '@service/db/auth.service';
 import { BadRequestError } from '@global/helpers/error-handler';
 import { v4 as uuidv4 } from 'uuid';
+import HTTP_STATUS from 'http-status-codes';
 
 export class SignUp {
   @joiValidation(signupSchema)
@@ -30,6 +31,7 @@ export class SignUp {
     if (!result?.public_id) {
       throw new BadRequestError('File upload: Error occurred. Try again.');
     }
+    res.status(HTTP_STATUS.CREATED).json({message:'User created Sucessfully', authData});
   }
   private signupData(data: ISignUpData): IAuthDocument {
     const { _id, username, email, uId, password, avatarColor } = data;
