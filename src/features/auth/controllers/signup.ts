@@ -2,11 +2,13 @@ import { ObjectId } from 'mongodb';
 import { Request, Response } from 'express';
 import { joiValidation } from '@global/decorators/joi-validation.decorators';
 import { signupSchema } from '@auth/schemes/signup';
-import { IAuthDocument} from '@auth/interfaces/auth.interface';
+import { IAuthDocument, ISignUpData } from '@auth/interfaces/auth.interface';
 import { authService } from '@service/db/auth.service';
 import { BadRequestError } from '@global/helpers/error-handler';
 import { v4 as uuidv4 } from 'uuid';
 import HTTP_STATUS from 'http-status-codes';
+import { Helpers } from '@global/helpers/helpers';
+import { uploads } from '../../../shared/globals/helpers/imagekit-upload';
 
 export class SignUp {
   @joiValidation(signupSchema)
@@ -27,7 +29,8 @@ export class SignUp {
       password,
       avatarColor
     });
-    const result: UploadApiResponse = (await uploads(avatarImage, `${userObjectId}`, true, true)) as UploadApiResponse;
+    const result = (await uploads(avatarImage, `${userObjectId}`));
+    console.log(result)
     if (!result?.public_id) {
       throw new BadRequestError('File upload: Error occurred. Try again.');
     }

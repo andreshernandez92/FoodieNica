@@ -9,8 +9,10 @@ class AuthRoutes {
     this.router=express.Router();
   }
 
-  public routes(): Router{
+  public routes(): Router {
     this.router.post('/signup', SignUp.prototype.create);
+
+    return this.router;
   }
 
 }
