@@ -16,8 +16,6 @@ export function uploads(
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
   return new Promise((resolve,reject) => {
-    console.log(data),
-    console.log(public_id)
     imagekit.upload({
       file: data,
       fileName: public_id!,

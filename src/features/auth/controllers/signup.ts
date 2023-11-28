@@ -11,6 +11,7 @@ import { Helpers } from '@global/helpers/helpers';
 import { uploads } from '../../../shared/globals/helpers/imagekit-upload';
 
 export class SignUp {
+
   @joiValidation(signupSchema)
   public async create(req: Request, res: Response): Promise<void> {
     const { username, email, password, avatarColor, avatarImage } = req.body;
@@ -30,7 +31,6 @@ export class SignUp {
       avatarColor
     });
     const result = (await uploads(avatarImage, `${userObjectId}`));
-    console.log(result);
     if (!result?.fileId) {
       throw new BadRequestError('File upload: Error occurred. Try again.');
     }
