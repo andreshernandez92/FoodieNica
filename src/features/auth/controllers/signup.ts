@@ -30,8 +30,8 @@ export class SignUp {
       avatarColor
     });
     const result = (await uploads(avatarImage, `${userObjectId}`));
-    console.log(result)
-    if (!result?.public_id) {
+    console.log(result);
+    if (!result?.fileId) {
       throw new BadRequestError('File upload: Error occurred. Try again.');
     }
     res.status(HTTP_STATUS.CREATED).json({message:'User created Sucessfully', authData});

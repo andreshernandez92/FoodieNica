@@ -4,28 +4,27 @@ import { config } from '../../../config';
 
 const imagekit = new ImageKit({
   publicKey: `${config.IMAGEKITPUBLICKEY}`,
-  urlEndpoint: `${config.IMAGEKITURLENDPOINT}`,
-  privateKey:  `${config.IMAGEKITPRIVATEKEY}`
+  privateKey:  `${config.IMAGEKITPRIVATEKEY}`,
+  urlEndpoint: `${config.IMAGEKITURLENDPOINT}`
 });
 
 export function uploads(
-  file: string,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  data: any,
   public_id?: string,
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
 ): Promise<any> {
-  return new Promise((resolve) => {
+  return new Promise((resolve,reject) => {
+    console.log(data),
+    console.log(public_id)
     imagekit.upload({
-      file: file,
+      file: data,
       fileName: public_id!,
-      extensions: [
-        {
-            name: public_id
-        }]
-    }, (error, result) => {
-      if (error) resolve(error);
-      resolve(result);
-    });
+  }, (error, result) => {
+      if (error) reject(error);
+      else resolve(result);
+  });
   });
 }
 
