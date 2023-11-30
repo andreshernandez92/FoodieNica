@@ -14,6 +14,7 @@ class Config {
     public IMAGEKITPUBLICKEY: string | undefined;
     public IMAGEKITURLENDPOINT: string | undefined;
     public IMAGEKITPRIVATEKEY: string | undefined;
+    public IMAGEKITFOLDERURL: string | undefined;
 
 private readonly DEFAULT_DATABASE_URL = "mongodb"
 
@@ -32,6 +33,7 @@ constructor(){
     this.IMAGEKITPUBLICKEY = process.env.IMAGEKITPUBLICKEY;
     this.IMAGEKITURLENDPOINT = process.env.IMAGEKITURLENDPOINT;
     this.IMAGEKITPRIVATEKEY =process.env.IMAGEKITPRIVATEKEY;
+    this.IMAGEKITFOLDERURL =process.env.IMAGEKITPRIVATEKEY;
 }
 
 };

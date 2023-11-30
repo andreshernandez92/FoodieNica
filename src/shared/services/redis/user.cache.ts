@@ -1,3 +1,10 @@
+import { BaseCache } from '@service/redis/base.cache';
+import { IUserDocument } from '@user/interfaces/user.interface';
+import Logger from 'bunyan';
+import { config } from '@root/config';
+import { ServerError } from '@global/helpers/error-handler';
+const log: Logger = config.createLogger('userCache');
+
 export class UserCache extends BaseCache {
   constructor() {
     super('userCache');
@@ -62,3 +69,4 @@ export class UserCache extends BaseCache {
       throw new ServerError('Server error. Try again.');
     }
   }
+}
