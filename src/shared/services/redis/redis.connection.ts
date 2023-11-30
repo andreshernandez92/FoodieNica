@@ -1,6 +1,5 @@
 import { config } from '@root/config';
-import { Logger } from 'bunyan';
-import { createClient } from 'redis';
+import Logger = require("bunyan")
 import {BaseCache} from '@service/redis/base.cache';
 
 const log: Logger = config.createLogger('redisConnection');
@@ -11,9 +10,13 @@ constructor(){
 
 async connect(): Promise<void> {
   try{
-    await this.client.connect()
+    await this.client.connect();
     const res = await this.client.ping();
-    console.log(res);
-  } catch(error)
+    console.log(res, 'redis')
+  } catch(error){
+    log.error(error)
+  }
 }
 }
+
+export const redisConnection: RedisConnection = new RedisConnection();

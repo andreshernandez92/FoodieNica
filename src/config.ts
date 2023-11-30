@@ -10,7 +10,7 @@ class Config {
     public SECRET_KEY_ONE: string | undefined;
     public SECRET_KEY_TWO: string | undefined;
     public CLIENT_URL: string | undefined;
-    public REDIS_HOST: string | undefined;
+    public REDIST_HOST: string | undefined;
     public IMAGEKITPUBLICKEY: string | undefined;
     public IMAGEKITURLENDPOINT: string | undefined;
     public IMAGEKITPRIVATEKEY: string | undefined;
@@ -28,7 +28,7 @@ constructor(){
     this.SECRET_KEY_ONE =  process.env.SECRET_KEY_ONE ||'';
     this.SECRET_KEY_TWO =  process.env.SECRET_KEY_TWO || '';
     this.CLIENT_URL =  process.env.CLIENT_URL || '';
-    this.REDIS_HOST =  process.env.REDIS_HOST || '';
+    this.REDIST_HOST =  process.env.REDIST_HOST || '';
     this.IMAGEKITPUBLICKEY = process.env.IMAGEKITPUBLICKEY;
     this.IMAGEKITURLENDPOINT = process.env.IMAGEKITURLENDPOINT;
     this.IMAGEKITPRIVATEKEY =process.env.IMAGEKITPRIVATEKEY;

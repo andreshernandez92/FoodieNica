@@ -91,7 +91,7 @@ public start(): void {
                 methods: ['GET','POST','PUT','DELETE','OPTIONS']
             }
         });
-        const pubClient = createClient({ url: config.REDIS_HOST});
+        const pubClient = createClient({ url: config.REDIST_HOST});
         const subClient = pubClient.duplicate();
         await Promise.all([pubClient.connect(), subClient.connect()]);
         io.adapter(createAdapter(pubClient,subClient));

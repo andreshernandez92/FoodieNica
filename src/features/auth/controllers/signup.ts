@@ -9,7 +9,9 @@ import { v4 as uuidv4 } from 'uuid';
 import HTTP_STATUS from 'http-status-codes';
 import { Helpers } from '@global/helpers/helpers';
 import { uploads } from '../../../shared/globals/helpers/imagekit-upload';
+import { UserCache } from '../../../shared/services/redis/user.cache';
 
+const userCache: UserCache = new UserCache();
 export class SignUp {
 
   @joiValidation(signupSchema)
@@ -34,6 +36,11 @@ export class SignUp {
     if (!result?.fileId) {
       throw new BadRequestError('File upload: Error occurred. Try again.');
     }
+     // Add to redis cache
+     const userDataForCache: IUserDocument = SignUp.prototype.userData(authData, userObjectId);
+     userDataForCache.profilePicture = `https://res.cloudinary.com/dyamr9ym3/image/upload/v${result.version}/${userObjectId}`;
+     await userCache.saveUserToCache(`${userObjectId}`, uId, userDataForCache);
+
     res.status(HTTP_STATUS.CREATED).json({message:'User created Sucessfully', authData});
   }
   private signupData(data: ISignUpData): IAuthDocument {
