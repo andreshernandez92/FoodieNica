@@ -3,7 +3,7 @@ import Logger from 'bunyan';
 import { ExpressAdapter, createBullBoard, BullAdapter } from '@bull-board/express';
 import { config } from '@root/config'
 
-let BullAdapters: BullAdapter[]= [];
+let bullAdapters: BullAdapter[]= [];
 
 export let serverAdapter: ExpressAdapter;
 

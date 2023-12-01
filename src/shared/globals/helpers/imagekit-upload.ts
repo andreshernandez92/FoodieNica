@@ -19,7 +19,8 @@ export function uploads(
     imagekit.upload({
       file: data,
       fileName: public_id!,
-      folder: "/FoodieNica/"
+      folder: "/FoodieNica/",
+      useUniqueFileName: false
   }, (error, result) => {
       if (error) reject(error);
       else resolve(result);

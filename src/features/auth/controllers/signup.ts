@@ -43,7 +43,7 @@ export class SignUp {
     }
      // Add to redis cache
      const userDataForCache: IUserDocument = SignUp.prototype.userData(authData, userObjectId);
-     userDataForCache.profilePicture =`${config.IMAGEKITURLENDPOINT} ${userObjectId}`;
+     userDataForCache.profilePicture =`${config.IMAGEKITFOLDERURL}${userObjectId}`;
      await userCache.saveUserToCache(` ${userObjectId}`, uId, userDataForCache);
 
     res.status(HTTP_STATUS.CREATED).json({message:'User created Sucessfully', authData});
