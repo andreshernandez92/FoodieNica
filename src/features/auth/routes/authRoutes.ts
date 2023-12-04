@@ -11,6 +11,7 @@ class AuthRoutes {
 
   public routes(): Router {
     this.router.post('/signup', SignUp.prototype.create);
+    this.router.post('/signup', SignUp.prototype.read);
 
     return this.router;
   }

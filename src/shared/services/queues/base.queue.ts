@@ -2,6 +2,9 @@ import Queue, { Job } from 'bull';
 import Logger from 'bunyan';
 import { ExpressAdapter, createBullBoard, BullAdapter } from '@bull-board/express';
 import { config } from '@root/config'
+import { IAuthJob } from '@auth/interfaces/auth.interface';
+
+type type IBaseJobData = | IAuthJob
 
 let bullAdapters: BullAdapter[]= [];
 
@@ -36,5 +39,16 @@ export abstract class BaseQueue {
     this.queue.on('global:stalled', (jobId: string) => {
       this.log.info(`Job ${jobId} is stalled`);
     });
+
+
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  protected addJob(name: string, data: any ): void {
+    this.queue.add(name, data, { attempts: 3, backoff: { type: 'fixed', delay: 5000 } });
+  }
+
+  protected processJob(name: string, concurrency: number, callback: Queue.ProcessCallbackFunction<void>): void {
+    this.queue.process(name, concurrency, callback);
   }
 }

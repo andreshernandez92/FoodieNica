@@ -12,6 +12,10 @@ import { Helpers } from '@global/helpers/helpers';
 import { uploads } from '../../../shared/globals/helpers/imagekit-upload';
 import { UserCache } from '../../../shared/services/redis/user.cache';
 import { config } from '../../../config';
+import {omit } from 'lodash';
+import { authQueue } from '../../../shared/services/queues/auth.queue';
+import { userQueue } from '../../../shared/services/queues/user.queue';
+import JWT from 'jsonwebtoken';
 
 const userCache: UserCache = new UserCache();
 export class SignUp {
@@ -41,13 +45,34 @@ export class SignUp {
     if (!result?.fileId) {
       throw new BadRequestError('File upload: Error occurred. Try again.');
     }
+
      // Add to redis cache
      const userDataForCache: IUserDocument = SignUp.prototype.userData(authData, userObjectId);
      userDataForCache.profilePicture =`${config.IMAGEKITFOLDERURL}${userObjectId}`;
      await userCache.saveUserToCache(` ${userObjectId}`, uId, userDataForCache);
-
-    res.status(HTTP_STATUS.CREATED).json({message:'User created Sucessfully', authData});
+    // Add to the Database
+    omit(userDataForCache,['uId','username','email','avatarColor','password']);
+    authQueue.addAuthUserJob('addAuthUserToDB',{value: userDataForCache});
+    userQueue.addUserJob('addUserToDB',{value: userDataForCache});
+   const userJWT: string = SignUp.prototype.signToken(authData,userObjectId);
+   req.session = {jwt: userJWT};
+    res.status(HTTP_STATUS.CREATED).json({message:'User created Sucessfully', user: userDataForCache, token: userJWT});
   }
+
+
+  private signToken(data: IAuthDocument, userObjectId: ObjectId): string {
+    return JWT.sign(
+      {
+        userId: userObjectId,
+        uId: data.uId,
+        email: data.email,
+        username: data.username,
+        avatarColor: data.avatarColor
+      },
+      config.JWT_TOKEN!
+    );
+  }
+
   private signupData(data: ISignUpData): IAuthDocument {
     const { _id, username, email, uId, password, avatarColor } = data;
     return {
