@@ -7,7 +7,8 @@ import { authService } from '@service/db/auth.service';
 import { loginSchema } from '@auth/schemes/signin';
 import { IAuthDocument } from '@auth/interfaces/auth.interface';
 import { BadRequestError } from '@global/helpers/error-handler';
-7
+import { userService } from '@service/db/user.service';
+import { IUserDocument } from '@user/interfaces/user.interface';
 
 export class SignIn {
   @joiValidation(loginSchema)
@@ -33,6 +34,15 @@ export class SignIn {
       config.JWT_TOKEN!
     );
      req.session = { jwt: userJwt };
+     const userDocument: IUserDocument = {
+      ...user,
+      authId: existingUser!._id,
+      username: existingUser!.username,
+      email: existingUser!.email,
+      avatarColor: existingUser!.avatarColor,
+      uId: existingUser!.uId,
+      createdAt: existingUser!.createdAt
+    } as IUserDocument;
      res.status(HTTP_STATUS.OK).json({ message: 'User login successfully', user: userDocument, token: userJwt });
 
     }
