@@ -19,4 +19,4 @@ class userWorker {
   }
 }
 
-export const authWorker: userWorker = new userWorker();
+export const userWorker: userWorker = new userWorker();
