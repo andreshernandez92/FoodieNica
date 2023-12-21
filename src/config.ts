@@ -1,5 +1,5 @@
-import dotenv from 'dotenv'
-import bunyan from 'bunyan'
+import dotenv from 'dotenv';
+import bunyan from 'bunyan';
 
 dotenv.config({});
 
@@ -16,10 +16,10 @@ class Config {
     public IMAGEKITPRIVATEKEY: string | undefined;
     public IMAGEKITFOLDERURL: string | undefined;
 
-private readonly DEFAULT_DATABASE_URL = "mongodb"
+private readonly DEFAULT_DATABASE_URL = 'mongodb';
 
 public createLogger(name: string): bunyan {
-     return bunyan.createLogger({name, level: 'debug'})
+     return bunyan.createLogger({name, level: 'debug'});
 }
 
 constructor(){

@@ -13,8 +13,7 @@ class AuthRoutes {
 
   public routes(): Router {
     this.router.post('/signup', SignUp.prototype.create);
-    this.router.post('/signup', SignIn.prototype.read);
-
+    this.router.post('/signin', SignIn.prototype.read);
     return this.router;
   }
   public signoutRoute(): Router {
