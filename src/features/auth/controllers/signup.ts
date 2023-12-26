@@ -9,12 +9,12 @@ import { BadRequestError } from '@global/helpers/error-handler';
 import { v4 as uuidv4 } from 'uuid';
 import HTTP_STATUS from 'http-status-codes';
 import { Helpers } from '@global/helpers/helpers';
-import { uploads } from '../../../shared/globals/helpers/imagekit-upload';
-import { UserCache } from '../../../shared/services/redis/user.cache';
+import { uploads } from '@global//helpers/imagekit-upload';
+import { UserCache } from '@service/redis/user.cache';
 import { config } from '../../../config';
 import {omit } from 'lodash';
-import { authQueue } from '../../../shared/services/queues/auth.queue';
-import { userQueue } from '../../../shared/services/queues/user.queue';
+import { authQueue } from '@service/queues/auth.queue';
+import { userQueue } from '@service/queues/user.queue';
 import JWT from 'jsonwebtoken';
 
 const userCache: UserCache = new UserCache();
@@ -29,8 +29,8 @@ export class SignUp {
     }
     const authObjectId: ObjectId = new ObjectId();
     const userObjectId: ObjectId = new ObjectId();
-    const  uuid = uuidv4()
-    const hex = "0x" + uuid.replace(/-/g, "");
+    const  uuid = uuidv4();
+    const hex = '0x' + uuid.replace(/-/g, '');
     const decimal = BigInt(hex).toString();
     const uId: string = decimal;
     const authData: IAuthDocument = SignUp.prototype.signupData({
